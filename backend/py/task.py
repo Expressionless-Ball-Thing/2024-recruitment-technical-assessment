@@ -13,21 +13,69 @@ class File:
 Task 1
 """
 def leafFiles(files: list[File]) -> list[str]:
-    return []
+    
+    parents = set([file.parent for file in files])
+    return list(map(lambda x: x.name, filter(lambda x: x.id not in parents, files)))
 
 
 """
 Task 2
 """
 def kLargestCategories(files: list[File], k: int) -> list[str]:
-    return []
-
+    dictionary = dict()
+    for file in files:
+        for cat in file.categories:
+            if cat not in dictionary.keys():
+                dictionary[cat] = 1
+            else:
+                dictionary[cat] += 1
+    
+    return [cat for cat, _ in list(reversed(sorted(dictionary.items(), key=lambda item: item[1])))[:k]]
 
 """
 Task 3
 """
 def largestFileSize(files: list[File]) -> int:
-    return 0
+    if len(files) == 0:
+        return 0
+
+    candidates = [file for file in files if file.parent == -1]
+
+    dictionary = dict()
+    dp = dict()
+
+    for file in files:        
+        if file.parent not in dictionary.keys():
+            dictionary[file.parent] = [file]
+            dp[file.parent] = [file.id]
+        else:
+            dictionary[file.parent].append(file)
+            dp[file.parent].append(file.id)
+        
+
+    maxsize = 0
+    for candidate in candidates:
+
+
+        visited = set({candidate.id})
+        queue = [candidate]
+        size = 0
+        while (len(queue) > 0):
+            length = len(queue)
+            for i in range(length):
+                stuff = queue.pop(0)
+                size += stuff.size
+                if stuff.id in dictionary:
+                    for thing in dictionary[stuff.id]:
+                        if thing.id not in visited:
+                            visited.add(thing.id)
+                            queue.append(thing)
+        maxsize = max(maxsize, size)
+
+
+
+    return maxsize
+    # retu rn max(list(dictionary.values()))
 
 
 if __name__ == '__main__':
