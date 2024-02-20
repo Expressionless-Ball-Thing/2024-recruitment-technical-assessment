@@ -1,2 +1,6 @@
 Please detail the instructions to view your solution here:
 
+make sure that you have cd into the "frontend" folder.
+
+type "npm install"
+then type "npm run dev"
